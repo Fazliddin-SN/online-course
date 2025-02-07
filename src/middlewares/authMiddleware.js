@@ -13,7 +13,7 @@ export const verifyToken = (req, res, next) => {
     }
     // extract token after "Bearer "
     const token = authHeader.split(" ")[1];
-    console.log("token: ", token);
+    // console.log("token: ", token);
     // make sure token exists
     if (!token) {
       throw new appError("No token, authorization denied.", 401);

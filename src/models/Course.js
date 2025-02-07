@@ -1,13 +1,20 @@
-import { Schema, model } from "mongoose";
-import { number } from "zod";
-
+import mongoose, { Schema, model } from "mongoose";
 const courseSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
-      // unique: true,
+      unique: true,
     },
+    coaches: [
+      { type: mongoose.Types.ObjectId, ref: "Coach", role: "main" },
+      {
+        typeof: mongoose.Types.ObjectId,
+        ref: "Coach",
+        role: "second",
+      },
+    ],
+
     description: {
       type: String,
       required: true,
@@ -16,7 +23,11 @@ const courseSchema = new Schema(
       type: Number,
       required: true,
     },
-    subject: {
+    price: {
+      type: Number,
+      required: true,
+    },
+    level: {
       type: String,
       required: true,
     },
@@ -28,12 +39,9 @@ const courseSchema = new Schema(
       type: Date,
       required: true,
     },
-    students: {
-      type: Array,
-      required: false,
-    },
+    students: [{ type: Schema.Types.ObjectId, ref: "User" }],
     reviews: {
-      type: Object,
+      type: Array,
       required: false,
     },
     rate: {

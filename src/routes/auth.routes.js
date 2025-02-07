@@ -4,28 +4,57 @@ import {
   validateData,
   verifyToken,
 } from "../middlewares/index.js";
-import { userRegisterSchema } from "../validation/schemaValidation.js";
+import {
+  userRegisterSchema,
+  userLoginSchema,
+} from "../validation/schemaValidation.js";
 import { authControllers } from "../controllers/index.js";
 
 export const authRouter = Router();
 
 authRouter.post(
-  "/register",
+  "/users/register",
   validateData(userRegisterSchema),
   authControllers.register
 );
 
-authRouter.post("/login", authControllers.login);
-authRouter.get("/profile", authControllers.profile);
+//USER LOGIN
+authRouter.post(
+  "/users/login",
+  validateData(userLoginSchema),
+  authControllers.login
+);
+
+// ACCESS PROFILE BY PASSWORD AND EMAIL query params
+authRouter.get("/users/profile", verifyToken, authControllers.profile);
+
+// DELETE USER BY ID
 authRouter.delete(
-  "/delete/:userId",
+  "/users/delete/:userId",
   verifyToken,
   authorizeRole("admin"),
   authControllers.delete
 );
+
+// GET USER INFO BY ID
 authRouter.get(
-  "/users/:userId",
+  "/users/userInfo/:userId",
   verifyToken,
   authorizeRole("admin"),
   authControllers.findUser
+);
+
+// UPDATE USER INFO
+authRouter.put(
+  "/users/update/:userId",
+  verifyToken,
+  authorizeRole("admin"),
+  authControllers.updateUser
+);
+
+authRouter.get(
+  "/users/details",
+  verifyToken,
+  authorizeRole("admin"),
+  authControllers.fetchAllUsers
 );

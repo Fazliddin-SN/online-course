@@ -10,9 +10,44 @@ courseRouter.post(
   verifyToken,
   authorizeRole("admin"),
   validateData(courseValidation),
-  courseControllers.creare
+  courseControllers.create
 );
 
-courseRouter.patch("/courses/update", courseControllers.updateCourse);
-courseRouter.delete("/courses/remove", courseControllers.delete);
-courseRouter.put("/courses/assign", courseControllers.assignStudents);
+courseRouter.put(
+  "/courses/update/:courseId",
+  verifyToken,
+  authorizeRole("admin", "coach"),
+  validateData(courseValidation),
+  courseControllers.updateCourse
+);
+
+courseRouter.delete(
+  "/courses/remove/:courseId",
+  verifyToken,
+  authorizeRole("admin"),
+  courseControllers.delete
+);
+courseRouter.put(
+  "/courses/assign",
+  verifyToken,
+  authorizeRole("admin"),
+  courseControllers.assignStudents
+);
+// COACH ASSIGN
+courseRouter.put(
+  "/courses/coaches/assign",
+  verifyToken,
+  authorizeRole("admin"),
+  courseControllers.assignCoaches
+);
+courseRouter.get(
+  "/courses/details",
+  verifyToken,
+  courseControllers.fetchAllCourse
+);
+
+courseRouter.get(
+  "/courses/description",
+  verifyToken,
+  courseControllers.getDescription
+);

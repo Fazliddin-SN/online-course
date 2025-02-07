@@ -1,5 +1,4 @@
-import { Schema, model } from "mongoose";
-import { number } from "zod";
+import mongoose, { Schema, model } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -29,7 +28,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     role: {
@@ -38,11 +36,12 @@ const userSchema = new Schema(
       enum: ["manager", "admin", "user"],
       default: "user",
     },
-
-    location: {
+    level: {
       type: String,
       required: true,
+      default: "beginner",
     },
+    enrollments: [{ type: Schema.Types.ObjectId, ref: "Course" }],
   },
   {
     timestamps: true,
